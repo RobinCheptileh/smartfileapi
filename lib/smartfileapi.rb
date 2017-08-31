@@ -6,7 +6,8 @@ require 'json'
 module Smartfileapi
 
   BASE_URL = 'https://app.smartfile.com/api/2/'.freeze
-  PING_URL = 'ping/'
+  PING_URL = 'ping/'.freeze
+  WHOAMI_URL = 'whoami/'.freeze
 
   # All services
   class Services
@@ -18,14 +19,28 @@ module Smartfileapi
 
     # Ping API Server
     def ping_server
-      request_res = request_resource PING_URL
-      response = request_res.get
+      response = request_resource(PING_URL).get
+      json = JSON.parse(response.body, symbolize_names: true)
+      put_normals(response).merge(ping: json[:ping])
+    end
 
+    # Get Current user's identity
+    def whoami
+      response = request_resource(WHOAMI_URL).get
+      json = JSON.parse(response.body, symbolize_names: true)
+      put_normals(response).merge(address: json[:address],
+                                  user: json[:user],
+                                  site: json[:site])
+    end
+
+    private
+
+    def put_normals(response)
+      json = JSON.parse(response.body, symbolize_names: true)
       { code: response.code,
         headers: response.headers,
         body: response.body,
-        json: JSON.parse(response.body, symbolize_name: true),
-        ping: :json[:ping] }
+        json: json }
     end
 
     def request_resource(url)
