@@ -117,7 +117,7 @@ RSpec.describe SmartFileApi do
       end
 
       it 'has 200 response code' do
-        expect(@smartfile_test_create_links[:code]).to be == 200
+        expect([200, 201].include?(@smartfile_test_create_links[:code])).to be true
       end
 
       it 'has all response fields' do

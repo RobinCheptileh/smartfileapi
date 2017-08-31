@@ -68,7 +68,7 @@ module SmartFileApi
 
     # Create links
     def create_link(params)
-      response = request_resource(LINK_URL).post(params: params)
+      response = request_resource(LINK_URL).post(params)
       json = JSON.parse(response.body, symbolize_names: true)
       put_normals(response).merge(acl: json[:acl],
                                   created: json[:created],
