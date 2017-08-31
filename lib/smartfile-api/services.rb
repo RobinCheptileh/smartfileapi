@@ -4,7 +4,6 @@ require 'json'
 
 # Ruby implementation for the SmartFile API
 module SmartFileApi
-
   BASE_URL = 'https://app.smartfile.com/api/2/'.freeze
   PING_URL = 'ping/'.freeze
   WHOAMI_URL = 'whoami/'.freeze

@@ -25,7 +25,7 @@ RSpec.describe SmartFileApi do
     end
   end
 
-  describe 'whoami' do
+  describe '#whoami' do
 
     before do
       @smartfile_test_whoami = @smartfile_test.whoami
@@ -48,7 +48,7 @@ RSpec.describe SmartFileApi do
     end
   end
 
-  describe 'session' do
+  describe '#session' do
 
     before do
       @smartfile_test_session = @smartfile_test.session
@@ -63,7 +63,7 @@ RSpec.describe SmartFileApi do
     end
   end
 
-  describe 'activity' do
+  describe '#list_activities' do
 
     before do
       @smartfile_test_activity = @smartfile_test.list_activities
@@ -90,7 +90,7 @@ RSpec.describe SmartFileApi do
 
   describe 'links' do
 
-    describe 'list links' do
+    describe '#list_links' do
 
       before do
         @smartfile_test_list_links = @smartfile_test.list_links
@@ -106,7 +106,7 @@ RSpec.describe SmartFileApi do
 
     end
 
-    describe 'create links' do
+    describe '#create_links' do
 
       before do
         @smartfile_test_create_links = @smartfile_test.create_link(path: '/ruby',

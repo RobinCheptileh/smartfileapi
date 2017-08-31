@@ -14,7 +14,7 @@ gem 'smartfile-api'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
