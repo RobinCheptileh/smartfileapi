@@ -2,10 +2,10 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'smartfileapi/version'
+require 'smartfile-api/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'smartfileapi'
+  spec.name          = 'smartfile-api'
   spec.version       = SmartFileApi::VERSION
   spec.authors       = ['Robin Cheptileh']
   spec.email         = ['robincheptileh@gmail.com']
