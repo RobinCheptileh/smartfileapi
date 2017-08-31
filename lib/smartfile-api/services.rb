@@ -62,7 +62,7 @@ module SmartFileApi
       params = { path: path } unless path.nil?
       response = request_resource(LINK_URL).get(params: params)
       json = JSON.parse(response.body, symbolize_names: true)
-      put_normals(response).merge(links: json[:results].length)
+      put_normals(response).merge(links: json[:results])
     end
 
     # Create links

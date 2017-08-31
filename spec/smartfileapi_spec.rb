@@ -101,7 +101,7 @@ RSpec.describe SmartFileApi do
       end
 
       it 'has valid response' do
-        expect(@smartfile_test_list_links[:links]).to be >= 0
+        expect(@smartfile_test_list_links[:links].length).to be >= 0
       end
 
     end
