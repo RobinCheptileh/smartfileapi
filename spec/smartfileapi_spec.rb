@@ -1,17 +1,17 @@
 require 'spec_helper'
 require 'figaro'
 
-RSpec.describe Smartfileapi do
+RSpec.describe SmartFileApi do
   before do
     Figaro.application = Figaro::Application.new(environment: 'development',
                                                  path: File.expand_path('../../application.yml', __FILE__))
     Figaro.application.load
-    @smartfile_test = Smartfileapi::Services.new
+    @smartfile_test = SmartFileApi::Services.new
   end
 
   describe 'version' do
     it 'has a version number' do
-      expect(Smartfileapi::VERSION).not_to be nil
+      expect(SmartFileApi::VERSION).not_to be nil
     end
   end
 
@@ -31,6 +31,10 @@ RSpec.describe Smartfileapi do
       @smartfile_test_whoami = @smartfile_test.whoami
     end
 
+    it 'has 200 response code' do
+      expect(@smartfile_test_whoami[:code]).to be == 200
+    end
+
     it 'has a valid IP' do
       expect(@smartfile_test_whoami[:address]).to match(/(\d{1,}\.){3}\d{1,3}/)
     end
@@ -42,5 +46,85 @@ RSpec.describe Smartfileapi do
     it 'has site' do
       expect(@smartfile_test_whoami[:site].nil?).not_to be true
     end
+  end
+
+  describe 'session' do
+
+    before do
+      @smartfile_test_session = @smartfile_test.session
+    end
+
+    it 'has 200 response code' do
+      expect(@smartfile_test_session[:code]).to be == 200
+    end
+
+    it 'has session expiry' do
+      expect(@smartfile_test_session[:expires].nil?).not_to be true
+    end
+  end
+
+  describe 'activity' do
+
+    before do
+      @smartfile_test_activity = @smartfile_test.list_activities
+    end
+
+    it 'has 200 response code' do
+      expect(@smartfile_test_activity[:code]).to be == 200
+    end
+
+    it 'has valid response' do
+      expect(@smartfile_test_activity[:total]).to be >= 0
+    end
+
+    it 'has all response fields' do
+      expect(@smartfile_test_activity.length).to be == 11
+    end
+
+    it 'has valid response with parameters' do
+      expect(@smartfile_test.list_activities(action: 'path removed',
+                                             limit: 5,
+                                             user: ENV['SMARTFILE_USERNAME'])[:code]).to be == 200
+    end
+  end
+
+  describe 'links' do
+
+    describe 'list links' do
+
+      before do
+        @smartfile_test_list_links = @smartfile_test.list_links
+      end
+
+      it 'has 200 response code' do
+        expect(@smartfile_test_list_links[:code]).to be == 200
+      end
+
+      it 'has valid response' do
+        expect(@smartfile_test_list_links[:links]).to be >= 0
+      end
+
+    end
+
+    describe 'create links' do
+
+      before do
+        @smartfile_test_create_links = @smartfile_test.create_link(path: '/ruby',
+                                                                   read: true,
+                                                                   recursive: true,
+                                                                   list: true,
+                                                                   write: true)
+      end
+
+      it 'has 200 response code' do
+        expect(@smartfile_test_create_links[:code]).to be == 200
+      end
+
+      it 'has all response fields' do
+        expect(@smartfile_test_create_links.length).to be == 16
+      end
+
+    end
+
   end
 end

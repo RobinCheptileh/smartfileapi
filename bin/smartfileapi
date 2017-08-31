@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "smartfileapi"
+require "smart_file_api"
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -11,4 +11,10 @@ require "smartfileapi"
 # Pry.start
 
 require "irb"
+require "figaro"
+
+Figaro.application = Figaro::Application.new(environment: 'development',
+                                             path: File.expand_path('../../application.yml', __FILE__))
+Figaro.application.load
+
 IRB.start(__FILE__)

@@ -6,15 +6,16 @@ require 'smartfileapi/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'smartfileapi'
-  spec.version       = Smartfileapi::VERSION
+  spec.version       = SmartFileApi::VERSION
   spec.authors       = ['Robin Cheptileh']
   spec.email         = ['robincheptileh@gmail.com']
 
   spec.summary       = %q{Fully featured smartfile api implementation for ruby}
   spec.description   = %q{Fully featured ruby implementation for the SmartFile API}
   spec.homepage      = 'https://github.com/RobinCheptileh/smartfileapi'
-  spec.source        = 'https://github.com/RobinCheptileh/smartfileapi'
   spec.license       = 'MIT'
+
+  spec.required_ruby_version = '>= 1.9'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
