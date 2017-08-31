@@ -15,10 +15,10 @@ module SmartFileApi
   # All services
   class Services
     def initialize
-      raise(ArgumentError, 'SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
+      raise(ArgumentError, 'SmartFileApi::Services SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
       @smartfile_key = ENV['SMARTFILE_KEY'].freeze
       @smartfile_pass = ENV['SMARTFILE_PASSWORD'].freeze
-      raise(ArgumentError, 'Authentication failed') if whoami[:code] != 200
+      raise(ArgumentError, 'SmartFileApi::Services Authentication failed') if whoami[:code] != 200
     end
 
     # Ping API Server
@@ -85,7 +85,7 @@ module SmartFileApi
     private
 
     def put_normals(response)
-      raise("Error code #{response.code}") unless [200, 201].include?(response.code)
+      raise("SmartFileApi::Services Error code #{response.code}") unless [200, 201].include?(response.code)
       json = JSON.parse(response.body, symbolize_names: true)
       { code: response.code,
         headers: response.headers,
