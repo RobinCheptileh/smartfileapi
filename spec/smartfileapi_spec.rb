@@ -18,5 +18,9 @@ RSpec.describe Smartfileapi do
     it 'has been configured properly' do
       expect(ENV.key?('SMARTFILE_KEY') && ENV.key?('SMARTFILE_PASSWORD')).to be true
     end
+
+    it 'has pinged the server' do
+      expect(Smartfileapi.ping_server.ping).to eq 'pong'
+    end
   end
 end

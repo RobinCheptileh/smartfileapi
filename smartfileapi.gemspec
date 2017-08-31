@@ -12,8 +12,8 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Fully featured smartfile api implementation for ruby}
   spec.description   = %q{Fully featured ruby implementation for the SmartFile API}
-  spec.homepage      = 'https://github.com/robincheptileh/smartfileapi'
-  spec.source        = 'https://github.com/robincheptileh/smartfileapi'
+  spec.homepage      = 'https://github.com/RobinCheptileh/smartfileapi'
+  spec.source        = 'https://github.com/RobinCheptileh/smartfileapi'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -36,4 +36,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'figaro'
+  spec.add_dependency 'rest-client'
 end
