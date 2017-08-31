@@ -20,7 +20,7 @@ RSpec.describe Smartfileapi do
     end
 
     it 'has pinged the server' do
-      expect(Smartfileapi.ping_server.ping).to eq 'pong'
+      expect(Smartfileapi::Services.new.ping_server[:ping]).to eq 'pong'
     end
   end
 end

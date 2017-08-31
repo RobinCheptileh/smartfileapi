@@ -1,28 +1,35 @@
 require "smartfileapi/version"
 require 'rest-client'
+require 'json'
 
 # Ruby implementation for the SmartFile API
 module Smartfileapi
 
-  # Set KEY and PASSWORD
-  raise(ArgumentError, 'SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
-  @smartfile_key = ENV['SMARTFILE_KEY'].freeze
-  @smartfile_pass = ENV['SMARTFILE_PASSWORD'].freeze
-  @login_resource = RestClient::Resource.new('https://app.smartfile.com/api/2/path/data/',
-                                             user: @smartfile_key,
-                                             password: @smartfile_pass)
+  BASE_URL = 'https://app.smartfile.com/api/2/'.freeze
+  PING_URL = 'ping/'
 
-  PING_URL = 'https://app.smartfile.com/api/2/ping/'.freeze
+  # All services
+  class Services
+    def initialize
+      raise(ArgumentError, 'SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
+      @smartfile_key = ENV['SMARTFILE_KEY'].freeze
+      @smartfile_pass = ENV['SMARTFILE_PASSWORD'].freeze
+    end
 
-  # Ping API Server
-  def self.ping_server
-    resp = RestClient.get PING_URL
-    response = Smartfileapi::Response.new
-    response.headers = response.headers
-    response.body = resp.body
-    response.json = JSON.parse(resp.body, symbolize_name: true)
-    response.ping = response.json.ping
+    # Ping API Server
+    def ping_server
+      request_res = request_resource PING_URL
+      response = request_res.get
 
-    response
+      { code: response.code,
+        headers: response.headers,
+        body: response.body,
+        json: JSON.parse(response.body, symbolize_name: true),
+        ping: :json[:ping] }
+    end
+
+    def request_resource(url)
+      RestClient::Resource.new(BASE_URL + url, user: @smartfile_key, password: @smartfile_pass)
+    end
   end
 end
