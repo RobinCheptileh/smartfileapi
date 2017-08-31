@@ -1,5 +1,5 @@
-require "bundler/setup"
-require "smart_file_api"
+require 'bundler/setup'
+require 'smartfile-api/services'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
