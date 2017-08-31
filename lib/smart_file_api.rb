@@ -58,10 +58,12 @@ module SmartFileApi
     end
 
     # Lists links within the site
-    def list_links(path = '')
-      response = request_resource(LINK_URL).get(params: { path: path })
+    def list_links(path = nil)
+      params = {}
+      params = { path: path } unless path.nil?
+      response = request_resource(LINK_URL).get(params: params)
       json = JSON.parse(response.body, symbolize_names: true)
-      put_normals(response).merge(links: json.length)
+      put_normals(response).merge(links: json[:results].length)
     end
 
     # Create links
