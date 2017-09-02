@@ -1,6 +1,6 @@
-# Smartile-api
+# SmartFile API (In Development)
 
-This is a fully featured ruby api wrapper implementation for the SmartFile API
+This is a fully featured ruby api wrapper for the SmartFile API.
 
 ## Installation
 
