@@ -10,18 +10,19 @@ module SmartFileApi
   SESSION_URL = 'session/'.freeze
   ACTIVITY_URL = 'activity/'.freeze
   LINK_URL = 'link/'.freeze
+  TASK_URL = 'task/'.freeze
 
   # All services
   class Services
     def initialize
-      raise(ArgumentError, 'SmartFileApi::Services SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
+      raise(ArgumentError, 'SmartFileApi::Services: SmartFile KEY and(or) PASSWORD missing') if !ENV.key?('SMARTFILE_KEY') || !ENV.key?('SMARTFILE_PASSWORD')
       @smartfile_key = ENV['SMARTFILE_KEY'].freeze
       @smartfile_pass = ENV['SMARTFILE_PASSWORD'].freeze
-      raise(ArgumentError, 'SmartFileApi::Services Authentication failed') if whoami[:code] != 200
+      raise(ArgumentError, 'SmartFileApi::Services: Authentication failed') if whoami[:code] != 200
     end
 
     # Ping API Server
-    def ping_server
+    def ping
       response = request_resource(PING_URL).get
       json = JSON.parse(response.body, symbolize_names: true)
       put_normals(response).merge(ping: json[:ping])
@@ -43,9 +44,15 @@ module SmartFileApi
       put_normals(response).merge(expires: json[:expires])
     end
 
-    # View activities for the site.
-    def list_activities(params = '')
-      response = request_resource(ACTIVITY_URL).get(params: params)
+    # List specified options
+    def list(option, params = '')
+      url = case option
+            when :activities then ACTIVITY_URL
+            when :links then LINK_URL
+            when :tasks then TASK_URL
+            else raise(ArgumentError, "SmartFileApi::Services.list: Invalid option '#{option}' argument")
+            end
+      response = request_resource(url).get(params: params)
       json = JSON.parse(response.body, symbolize_names: true)
       put_normals(response).merge(total: json[:total],
                                   page: json[:page],
@@ -54,15 +61,6 @@ module SmartFileApi
                                   previous: json[:previous],
                                   next: json[:next],
                                   results: json[:results])
-    end
-
-    # Lists links within the site
-    def list_links(path = nil)
-      params = {}
-      params = { path: path } unless path.nil?
-      response = request_resource(LINK_URL).get(params: params)
-      json = JSON.parse(response.body, symbolize_names: true)
-      put_normals(response).merge(links: json[:results])
     end
 
     # Create links
@@ -86,7 +84,7 @@ module SmartFileApi
     private
 
     def put_normals(response)
-      raise("SmartFileApi::Services Error code #{response.code}") unless [200, 201].include?(response.code)
+      raise("SmartFileApi::Services: Error code #{response.code}") unless [200, 201].include?(response.code)
       json = JSON.parse(response.body, symbolize_names: true)
       { code: response.code,
         headers: response.headers,
