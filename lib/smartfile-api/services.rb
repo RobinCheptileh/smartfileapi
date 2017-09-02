@@ -4,6 +4,7 @@ require 'json'
 
 # Ruby implementation for the SmartFile API
 module SmartFileApi
+  USER_AGENT = "SmartFileApi v#{SmartFileApi::VERSION} (#{RUBY_ENGINE} #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}) [#{RUBY_PLATFORM}]".freeze
   BASE_URL = 'https://app.smartfile.com/api/2/'.freeze
   PING_URL = 'ping/'.freeze
   WHOAMI_URL = 'whoami/'.freeze
@@ -18,6 +19,7 @@ module SmartFileApi
   PATH_ACCESS_URL = 'access/path/'.freeze
   PATH_SEARCH_URL = 'search/path/'.freeze
   PATH_NOTIFY_URL = 'watch/paths/'.freeze
+  PATH_VERSION_URL = 'path/list-versions/'.freeze
 
   # All services
   class Services
@@ -70,6 +72,7 @@ module SmartFileApi
             when :map then PATH_MAP_URL
             when :access then PATH_ACCESS_URL + path
             when :notifications then PATH_NOTIFY_URL
+            when :version then PATH_VERSION_URL + path
             else raise(ArgumentError, "SmartFileApi::Services.get_path: Invalid option '#{option}'")
             end
       format_response(get_request(url, params: params))
@@ -99,20 +102,30 @@ module SmartFileApi
                    ssl_opts: (response.request.ssl_opts || {}) },
         code: response.code,
         headers: response.headers,
+        raw_headers: response.raw_headers,
+        cookies: response.cookies,
+        cookie_jar: response.cookie_jar,
+        history: response.history,
         body: response.body }.merge(JSON.parse(response.body,
                                                symbolize_names: true))
     end
 
     # Make a get request with ability to rescue errors
     def get_request(url, additional_headers = {})
-      RestClient::Resource.new(BASE_URL + url, user: @smartfile_key, password: @smartfile_pass).get(additional_headers)
+      RestClient::Resource.new(BASE_URL + url,
+                               user: @smartfile_key,
+                               password: @smartfile_pass,
+                               headers: { user_agent: USER_AGENT }).get(additional_headers)
     rescue RestClient::Exception => e
       e.response
     end
 
     # Make a post request with ability to rescue errors
     def post_request(url, payload, additional_headers = {})
-      RestClient::Resource.new(BASE_URL + url, user: @smartfile_key, password: @smartfile_pass).post(payload, additional_headers)
+      RestClient::Resource.new(BASE_URL + url,
+                               user: @smartfile_key,
+                               password: @smartfile_pass,
+                               headers: { user_agent: USER_AGENT }).post(payload, additional_headers)
     rescue RestClient::Exception => e
       e.response
     end
