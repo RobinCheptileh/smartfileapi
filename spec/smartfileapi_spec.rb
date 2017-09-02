@@ -44,7 +44,7 @@ RSpec.describe SmartFileApi do
     end
 
     it 'has site' do
-      expect(@smartfile_test_whoami[:site].nil?).not_to be true
+      expect(@smartfile_test_whoami[:site]).not_to be nil
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe SmartFileApi do
     end
 
     it 'has session expiry' do
-      expect(@smartfile_test_session[:expires].nil?).not_to be true
+      expect(@smartfile_test_session[:expires]).not_to be nil
     end
   end
 
